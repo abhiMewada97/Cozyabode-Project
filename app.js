@@ -46,7 +46,7 @@ app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
-app.engine("ejs",ejsMate);
+app.engine("ejs",ejsMate);      //The first parameter ("ejs") specifies the file extension to associate with the template engine, and the second parameter (ejsMate) is the function or module used for rendering EJS templates.
 app.use(express.static(path.join(__dirname,"/public")));
 
 // mongo session
@@ -63,9 +63,9 @@ store.on("error", () => {
     console.log("ERROR in MONGO SESSION STORE ", error)
 });
 
-const sesssionOptions = {
-    store,
-    secret: "mysupersecretcode",
+const sesssionOptions = {  //const sessionOptions = { ... }: This defines options for session management using the express-session middleware.
+    store,                  //store: Specifies the session store to be used. In this case, it appears that a MongoDB session store instance is being used. This store is likely configured elsewhere in the code.
+    secret: "mysupersecretcode", //secret: This is a required option that provides a string used to sign the session ID cookie. It helps prevent tampering with the session cookie.
     resave: false,
     saveUninitialized: true,
     cookie:{
@@ -80,12 +80,12 @@ const sesssionOptions = {
 // });
 
 app.use(session(sesssionOptions));
-app.use(flash());  // we have use flash before route becuase routes use the flash
+app.use(flash());  // we have to use flash before route becuase routes use the flash
 
 // here we are telling that we will use it
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));   // use static authenticate method of model in LocalStrategy  // when new user come it authenticate the use   // authenticate() Generates a function that is used in Passport's LocalStrategy
+passport.use(new LocalStrategy(User.authenticate()));   // use static authenticate method of model in LocalStrategy  // when new user come it authenticate the user   // authenticate() Generates a function that is used in Passport's LocalStrategy
 
 // use static serialize and deserialize of model for passport session support
 passport.serializeUser(User.serializeUser());           // serializeUser() Generates a function that is used by Passport to serialize users into the session   // serialize means -> store the info related to user into session 
